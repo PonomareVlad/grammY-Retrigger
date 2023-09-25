@@ -1,0 +1,30 @@
+{
+  "name": "grammy-retrigger",
+  "version": "0.0.0",
+  "description": "ReTrigger grammY updates",
+  "funding": "https://PonomareVlad.ru/donate",
+  "author": "Vladislav Ponomarev <PonomareVlad@users.noreply.github.com> (https://PonomareVlad.ru)",
+  "type": "module",
+  "main": "index.mjs",
+  "types": "index.d.mts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "grammy": "*"
+  },
+  "devDependencies": {
+    "@grammyjs/conversations": "^1.1.2",
+    "grammy": "^1.19.0",
+    "typescript": "^5.2.2"
+  },
+  "files": [
+    "LICENSE",
+    "index.*",
+    "*.json",
+    "*.md"
+  ],
+  "keywords": [],
+  "license": "MIT"
+}
