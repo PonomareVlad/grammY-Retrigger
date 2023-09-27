@@ -1,6 +1,8 @@
-import {Bot as BaseBot} from "grammy";
+import {Bot as BaseBot, webhookCallback as baseWebhookCallback} from "grammy";
 import type {Middleware, WebhookReplyEnvelope, Context} from "grammy";
+import type {FrameworkAdapter, SupportedFrameworks} from "grammy/out/convenience/frameworks";
 import type {OtherwiseConfig} from "@grammyjs/conversations/out/conversation";
+import type {WebhookOptions} from "grammy/out/convenience/webhook";
 import type {Conversation} from "@grammyjs/conversations";
 import type {Update} from "grammy/types";
 
@@ -25,6 +27,7 @@ export class Bot<C extends Context = Context> extends BaseBot<C> {
 
 export function reTrigger<C extends Context & ReTriggerFlavor>(bot: Bot): Middleware<C> {
     return async (ctx, next) => {
+        (globalThis as Record<string, any>)?.signal?.throwIfAborted?.();
         ctx.reTrigger = () => void (bot.reTriggerUpdate = true);
         return next();
     }
@@ -43,5 +46,21 @@ export function createReTrigger<C extends Context & ReTriggerFlavor>(
             ctx => ctx.update.update_id === update_id,
             opts
         );
+    }
+}
+
+export interface OptionsForWebhookCallback extends WebhookOptions {
+    reTriggerTimeout: number
+}
+
+export function webhookCallback<C extends Context = Context>(
+    bot: Bot<C>,
+    adapter?: SupportedFrameworks | FrameworkAdapter,
+    {reTriggerTimeout, ...webhookOptions} = {} as OptionsForWebhookCallback
+) {
+    return (request: Request) => {
+        if (reTriggerTimeout)
+            (globalThis as Record<string, any>).signal = AbortSignal.timeout(reTriggerTimeout);
+        return baseWebhookCallback(bot, adapter, webhookOptions)(request);
     }
 }
