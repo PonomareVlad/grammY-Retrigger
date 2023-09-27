@@ -39,7 +39,7 @@ export function createReTrigger<C extends Context & ReTriggerFlavor>(
     conversation: Conversation<C>,
     opts?: OtherwiseConfig<C>
 ) {
-    return async () => {
+    return async (result: any) => {
         // @ts-ignore
         const {update_id} = conversation.currentCtx.update;
         // @ts-ignore
@@ -48,6 +48,7 @@ export function createReTrigger<C extends Context & ReTriggerFlavor>(
             ctx => ctx.update.update_id === update_id,
             opts
         );
+        return result;
     }
 }
 
