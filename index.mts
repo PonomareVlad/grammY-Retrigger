@@ -6,6 +6,8 @@ import type {WebhookOptions} from "grammy/out/convenience/webhook";
 import type {Conversation} from "@grammyjs/conversations";
 import type {Update} from "grammy/types";
 
+export * from "grammy";
+
 export interface ReTriggerFlavor {
     reTrigger: () => void
 }
