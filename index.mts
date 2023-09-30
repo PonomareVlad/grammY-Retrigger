@@ -20,6 +20,8 @@ export class Bot<C extends Context = Context> extends BaseBot<C> {
         update: Update,
         webhookReplyEnvelope?: WebhookReplyEnvelope
     ) {
+        if ((globalThis as Record<string, any>)?.process?.env?.LOG_UPDATES)
+            console.log(update);
         do {
             this.reTriggerUpdate = false;
             await super.handleUpdate(update, webhookReplyEnvelope);
